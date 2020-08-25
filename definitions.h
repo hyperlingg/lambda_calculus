@@ -9,6 +9,7 @@ class Term
 public:
     Term(){};
     ~Term();
+    
 };
 
 /* every named variable is a term */
@@ -20,6 +21,8 @@ private:
 public:
     Variable(std::string name);
     ~Variable();
+    std::string getName();
+   
 };
 
 /* if lterm and rterm are terms, then Application(lterm, rterm) is a term */
@@ -33,6 +36,9 @@ private:
 public:
     Application(Term M, Term N);
     ~Application();
+    Term getLTerm();
+
+   
 };
 
 /* If var is a variable and rterm a term, then Abstraction(var,rterm) is a term */
@@ -41,9 +47,10 @@ class Abstraction : public Term
 {
 private:
     Variable var;
-    Term rterm;
+    Term *rterm;
 
 public:
-    Abstraction(Variable var, Term rterm);
+    Abstraction(Variable var, Term *rterm);
     ~Abstraction();
+    
 };

@@ -1,8 +1,16 @@
 #include <iostream>
 #include "definitions.h"
 
+std::string dump(Variable var)
+{
+    return var.getName();
+}
+
 int main()
 {
-    Term lambda_x_xy = Abstraction(Variable("x"), Application(Variable("x"), Variable("y"))); // lambda x.(xy)
+    Variable x = Variable("x");
+    Variable *pnt_x = &x;
+    std::cout << dump(x) << std::endl;
+    
     return 0;
 }
