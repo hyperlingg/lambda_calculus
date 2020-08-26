@@ -45,5 +45,4 @@ public:
     Term(Str_Expr str, LocationMap loc_map); // assert : len(str) == length(loc_map)
     ~Term(){};
     void print();
-    int expandedSize();
 };
