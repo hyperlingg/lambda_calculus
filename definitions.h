@@ -1,56 +1,44 @@
-/* inductive definition of lambda terms */
+/* list definition of lambda terms */
 /* author: jonas lingg */
 
 #include <string>
+#include <vector>
+#include <utility>
 
-/* concrete class serving as base type */
+/* first component is list index, second is span (offset to closing parenthesis) */
+using Location = std::pair<int, int>;
+
+enum SymbolType
+{
+    Variable,    /*  "x"  */
+    Application, /*  "()" */
+    Abstraction  /*  "[]" */
+};
+
+class Symbol
+{
+private:
+    char sym;
+    Location loc;
+    SymbolType type;
+
+public:
+    Symbol(char sym, Location loc, SymbolType type);
+    ~Symbol(){};
+};
+
+/* symbolic representation of a term */
+using S_Expr = std::vector<Symbol>;
+using Str_Expr = std::string;
+using LocationMap = std::vector<Location>;
+
 class Term
 {
-public:
-    Term(){};
-    ~Term();
-    
-};
-
-/* every named variable is a term */
-class Variable : public Term
-{
 private:
-    std::string name;
+    S_Expr s_expr;
 
 public:
-    Variable(std::string name);
-    ~Variable();
-    std::string getName();
-   
-};
-
-/* if lterm and rterm are terms, then Application(lterm, rterm) is a term */
-/* e.g. for terms M,N => (MN) is a term */
-class Application : public Term
-{
-private:
-    Term lterm;
-    Term rterm;
-
-public:
-    Application(Term M, Term N);
-    ~Application();
-    Term getLTerm();
-
-   
-};
-
-/* If var is a variable and rterm a term, then Abstraction(var,rterm) is a term */
-/* e.g. for variable x and term M => (lambda x.M) is a term */
-class Abstraction : public Term
-{
-private:
-    Variable var;
-    Term *rterm;
-
-public:
-    Abstraction(Variable var, Term *rterm);
-    ~Abstraction();
-    
+    Term(Str_Expr str, LocationMap loc_map); // assert : len(str) == length(loc_map)
+    ~Term(){};
+    void print();
 };
