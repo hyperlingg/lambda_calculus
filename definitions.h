@@ -1,5 +1,6 @@
 /* list definition of lambda terms */
 /* author: jonas lingg */
+#pragma once
 
 #include <string>
 #include <vector>
@@ -10,9 +11,11 @@ using Location = std::pair<int, int>;
 
 enum SymbolType
 {
-    Variable,    /*  "x"  */
-    Application, /*  "()" */
-    Abstraction  /*  "[]" */
+    Variable,         /*  "x" */
+    OpenApplication,  /*  "(" */
+    OpenAbstraction,  /*  "[" */
+    CloseAbstraction, /*  "]" */
+    CloseApplication  /*  ")" */
 };
 
 class Symbol
@@ -20,11 +23,12 @@ class Symbol
 private:
     char sym;
     Location loc;
-    SymbolType type;
 
 public:
+    SymbolType type;
     Symbol(char sym, Location loc, SymbolType type);
     ~Symbol(){};
+    std::string getSym();
 };
 
 /* symbolic representation of a term */
@@ -41,4 +45,5 @@ public:
     Term(Str_Expr str, LocationMap loc_map); // assert : len(str) == length(loc_map)
     ~Term(){};
     void print();
+    int expandedSize();
 };
