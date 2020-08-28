@@ -54,27 +54,22 @@ void Term::print()
 
     for (Symbol &sym : s_expr)
     {
-
-        std::string temp = "";
+        std::string temp;
 
         switch (sym.getSymType())
         {
         case OpenApplication:
             temp = "(";
-            std::cout << "OpenApplication" << std::endl;
             break;
         case OpenAbstraction:
             temp = "(lambda ";
-            std::cout << "OpenAbstraction" << std::endl;
             openAbstract = true;
             break;
         case CloseAbstraction:
             temp = ")";
-            std::cout << "CloseAbstraction" << std::endl;
             break;
         case CloseApplication:
             temp = ")";
-            std::cout << "CloseApplication" << std::endl;
             break;
         case Variable:
             if (openAbstract) /* this variable is bound */
@@ -90,7 +85,6 @@ void Term::print()
         default:
             break;
         }
-        std::cout << temp << std::endl;
         str.append(temp);
     }
 

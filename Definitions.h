@@ -6,7 +6,7 @@
 #include <vector>
 #include <utility>
 
-/* first component is list index, second is span (offset to closing parenthesis) */
+/* first component is list index, second is position of closing parenthesis */
 using Location = std::pair<int, int>;
 
 enum SymbolType
