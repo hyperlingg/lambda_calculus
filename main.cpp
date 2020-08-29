@@ -1,9 +1,8 @@
 #include <iostream>
 #include <set>
-#include "Examples.h"
-#include "Definitions.h"
-#include "VarAnalysis.h"
-
+#include "include/Definitions.h"
+#include "include/VarAnalysis.h"
+#include "include/Examples.h"
 int main()
 {
     Term identity(lambda_x_x, map_lambda_x_x);
