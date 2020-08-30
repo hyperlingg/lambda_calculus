@@ -18,7 +18,12 @@ A command line parser is assumed: For every term (lambda x. ((xy)z)) it generate
 * printing internal representation as conventional lambda term
 * Variable analysis: set of free and bound variables for a term, e.g. for (lambda x. x), FV={} and BV={x}
 
-## In progress
+## CMake build
 
-* Boost.Test integration
-
+```
+mkdir build
+cd build
+cmake ../
+cmake --build .
+```
+results in an executable called `lambda_calculus`.
