@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(my_first_test)
+project(lambda_testing)
 enable_testing()
 
 set(Boost_ADDITIONAL_VERSIONS "1.71" "1.71.0")
@@ -11,13 +11,13 @@ add_subdirectory(../include
              [EXCLUDE_FROM_ALL])
 
 # creates the executable
-add_executable(test_executable definitions_test.cpp)
+add_executable(lambda_test lambda_test.cpp)
 # indicates the include paths
-target_include_directories(test_executable PUBLIC ${Boost_INCLUDE_DIRS} ../include)
+target_include_directories(lambda_test PUBLIC ${Boost_INCLUDE_DIRS} ../include)
 # indicates the shared library variant
-target_compile_definitions(test_executable PUBLIC "BOOST_TEST_DYN_LINK=1")
+target_compile_definitions(lambda_test PUBLIC "BOOST_TEST_DYN_LINK=1")
 # indicates the link paths
-target_link_libraries(test_executable Definitions VarAnalysis ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(lambda_test Definitions VarAnalysis ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 # declares a test with our executable
-add_test(NAME test1 COMMAND test_executable)
+add_test(NAME test1 COMMAND lambda_test)

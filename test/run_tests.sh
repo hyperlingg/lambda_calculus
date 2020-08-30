@@ -3,4 +3,4 @@ mkdir test_build
 cd test_build
 cmake ..
 cmake --build .
-ctest -VV
+./lambda_test --log_level=test_suite
