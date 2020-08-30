@@ -16,7 +16,7 @@ Term application(lambda_xxy, map_lambda_xxy);
 
 Term complex_application(lambda_x_xy_y_xy, map_lambda_x_xy_y_xy);
 
-// redirecting cout to output_test_stream 
+// redirecting cout to output_test_stream
 // source: https://stackoverflow.com/a/5405268
 struct cout_redirect
 {
@@ -33,7 +33,6 @@ struct cout_redirect
 private:
     std::streambuf *old;
 };
-
 
 BOOST_AUTO_TEST_SUITE(PrintingSuite)
 
@@ -83,6 +82,38 @@ BOOST_AUTO_TEST_CASE(complex_application_print)
     }
 
     BOOST_CHECK(output.is_equal("((lambda x.(xy))(lambda y.(xy)))\n"));
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(VarAnalysisSuite)
+
+BOOST_AUTO_TEST_CASE(identity_analysis)
+{
+    VarAnalysis va(identity);
+    Vars result = {{}, {'x'}};
+    BOOST_CHECK(va.getResults() == result);
+}
+
+BOOST_AUTO_TEST_CASE(contant_y_analysis)
+{
+    VarAnalysis va(constant_y);
+    Vars result = {{'y'}, {'x'}};
+    BOOST_CHECK(va.getResults() == result);
+}
+
+BOOST_AUTO_TEST_CASE(application_print_analysis)
+{
+    VarAnalysis va(application);
+    Vars result = {{'x','y'}, {}};
+    BOOST_CHECK(va.getResults() == result);
+}
+
+BOOST_AUTO_TEST_CASE(complex_application_analysis)
+{
+    VarAnalysis va(complex_application);
+    Vars result = {{'x','y'}, {'x','y'}};
+    BOOST_CHECK(va.getResults() == result);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
