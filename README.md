@@ -16,7 +16,9 @@ A command line parser is assumed: For every term (lambda x. ((xy)z)) it generate
 ## Features
 
 * printing internal representation as conventional lambda term
+* Variable analysis: set of free and bound variables for a term, e.g. for (lambda x. x), FV={} and BV={x}
 
 ## In progress
 
-* Variable analysis: set of free and bound variables for a term, e.g. for (lambda x. x), FV={} and BV={x}.
+* Boost.Test integration
+
