@@ -9,7 +9,7 @@ S_Expr getSubExpr(S_Expr s_expr, int left, int right)
 
     for (int i = left; i <= right; i++)
     {
-       
+
         mod_sym = s_expr.at(i);
         mod_sym.shiftLocation(delta);
         sub_s_exp.push_back(mod_sym);
@@ -41,11 +41,12 @@ Vars analyze(S_Expr s_expr, Vars vars)
     }
     else
     {
-        S_Expr vleft, vright, app_vright;
+        S_Expr lterm, rterm;
         Symbol first_sym = s_expr.at(0);
         Symbol second_sym;
-        int open_left, close_left, open_right, close_right, app_open_right, app_close_right;
-        char var, bound_var;
+        int open_left, close_left;
+        int open_right, close_right;
+        char var;
 
         switch (first_sym.getSymType())
         {
@@ -63,24 +64,24 @@ Vars analyze(S_Expr s_expr, Vars vars)
             open_right = close_left + 1;
             close_right = s_expr.at(open_right).getLocation().second;
 
-            vleft = getSubExpr(s_expr, open_left, close_left);
-            vright = getSubExpr(s_expr, open_right, close_right);
+            lterm = getSubExpr(s_expr, open_left, close_left);
+            rterm = getSubExpr(s_expr, open_right, close_right);
 
-            vars = pairwise_merge(analyze(vleft, vars), analyze(vright, vars));
+            vars = pairwise_merge(analyze(lterm, vars), analyze(rterm, vars));
             break;
 
         case OpenAbstraction:
             second_sym = s_expr.at(1);
-            bound_var = second_sym.getSym().at(0);
+            var = second_sym.getSym().at(0);
 
-            vars.second.insert(bound_var);
-            vars.first.erase(bound_var);
+            vars.second.insert(var);
+            vars.first.erase(var);
 
-            app_open_right = s_expr.at(2).getLocation().first;
-            app_close_right = s_expr.at(2).getLocation().second;
-            app_vright = getSubExpr(s_expr, app_open_right, app_close_right);
+            open_right = s_expr.at(2).getLocation().first;
+            close_right = s_expr.at(2).getLocation().second;
+            rterm = getSubExpr(s_expr, open_right, close_right);
 
-            vars = analyze(app_vright, vars);
+            vars = analyze(rterm, vars);
             break;
 
         case Variable:

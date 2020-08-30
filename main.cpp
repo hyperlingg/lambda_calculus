@@ -6,17 +6,8 @@
 
 int main()
 {
-    Term identity(lambda_x_x, map_lambda_x_x);
-    identity.print();
-
     Term constant_y(lambda_x_xy, map_lambda_x_xy);
     constant_y.print();
-
-    Term application(lambda_xxy, map_lambda_xxy);
-    application.print();
-
-    Term complex_application(lambda_x_xy_y_xy, map_lambda_x_xy_y_xy);
-    complex_application.print();
 
     VarAnalysis va(constant_y);
     Vars res = va.getResults();
@@ -27,7 +18,7 @@ int main()
     {
         std::cout << var;
     }
-    std::cout << "}" << std::endl;
+    std::cout << "}, ";
 
     std::cout << "BV={";
 

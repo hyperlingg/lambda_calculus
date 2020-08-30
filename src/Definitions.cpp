@@ -91,20 +91,6 @@ void Term::print()
     std::cout << str << std::endl;
 }
 
-char Term::getBoundVariable(Symbol sym)
-{
-    if (sym.getSymType() == OpenAbstraction)
-    {
-        int abstraction_pos = sym.getLocation().first;
-
-        return s_expr.at(abstraction_pos + 1).getSym().at(0);
-    }
-    else
-    {
-        return '0'; // TODO use std::optional
-    }
-}
-
 std::string Symbol::getSym()
 {
     std::string str;
