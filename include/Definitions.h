@@ -20,19 +20,20 @@ enum SymbolType
 
 class Symbol
 {
-private:
-    char sym;
-    Location loc;
-    SymbolType type;
-
 public:
     Symbol(){};
     Symbol(char sym, Location loc, SymbolType type);
     ~Symbol(){};
+
     std::string getSym();
     Location getLocation();
     SymbolType getSymType();
     void shiftLocation(int left);
+
+private:
+    char sym;
+    Location loc;
+    SymbolType type;
 };
 
 /* symbolic representation of a term */
