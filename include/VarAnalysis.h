@@ -4,19 +4,39 @@
 #include <iostream>
 #include <set>
 
-using FreeVars = std::set<char>;
-using BoundVars = std::set<char>;
-using Vars = std::pair<FreeVars, BoundVars>;
+using VariableString = std::string;
+using VariableSet = std::set<VariableString>;
+// using Vars = std::pair<FreeVars, BoundVars>;
 
-class VarAnalysis
+// class VarAnalysis
+// {
+// public:
+//     VarAnalysis(Term term);
+//     ~VarAnalysis();
+//     Vars getResults();
+
+// private:
+//     FreeVars free_vars;
+//     BoundVars bound_vars;
+//     Term term;
+// };
+
+class VariableAnalysis
 {
 public:
-    VarAnalysis(Term term);
-    ~VarAnalysis();
-    Vars getResults();
-
-private:
-    FreeVars free_vars;
-    BoundVars bound_vars;
-    Term term;
+    virtual VariableSet execute(Term term) = 0;
 };
+
+class FreeVariableAnalysis : VariableAnalysis
+{
+public:
+    VariableSet execute();
+};
+
+class BoundVariableAnalysis : VariableAnalysis
+{
+public:
+    VariableSet execute();
+};
+
+

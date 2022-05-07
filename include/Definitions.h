@@ -25,31 +25,32 @@ public:
     Symbol(char sym, Location loc, SymbolType type);
     ~Symbol(){};
 
-    std::string getSym();
+    std::string getAsString();
     Location getLocation();
-    SymbolType getSymType();
-    void shiftLocation(int left);
+    SymbolType getSymbolType();
+    void shiftLocation(int left); // TODO delete or make private
 
 private:
-    char sym;
-    Location loc;
+    char symbol;
+    Location location;
     SymbolType type;
 };
 
 /* symbolic representation of a term */
-using S_Expr = std::vector<Symbol>;
-using Str_Expr = std::string;
+using SymbolicExpression = std::vector<Symbol>;
+using StringExpression = std::string;
 using LocationMap = std::vector<Location>;
 
 class Term
 {
-private:
-    S_Expr s_expr;
-
 public:
-    Term(Str_Expr str, LocationMap loc_map); // assert : len(str) == length(loc_map)
+    Term(StringExpression string_expression, LocationMap location_map); // TODO assert : len(str) == length(loc_map)
     ~Term(){};
+    std::string getAsString();
     void print();
-    S_Expr getSExpr();
-    char getBoundVariable(Symbol sym); // assert : sym.getSymType() == OpenAbstraction
+
+private:
+    SymbolicExpression symbolic_expression;
+
+    void initializeSymbolicExpression(StringExpression string_expression, LocationMap location_map);
 };
