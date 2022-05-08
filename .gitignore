@@ -1,2 +1,14 @@
 build/
 test/test_build
+test/CMakeFiles
+test/lambda_calculus
+test/include/CMakeFiles
+test/cmake_install.cmake
+test/CMakeCache.txt
+test/CPackConfig.cmake
+test/CPackSourceConfig.cmake
+test/Makefile
+test/include/cmake_install.cmake
+test/include/libDefinitions.a
+test/include/libVarAnalysis.a
+test/include/Makefile

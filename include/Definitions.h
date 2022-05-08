@@ -41,14 +41,14 @@ using SymbolicExpression = std::vector<Symbol>;
 using StringExpression = std::string;
 using LocationMap = std::vector<Location>;
 
-class Term
+class Term // TODO let Term be SymbolicExpression and encapsulate actions on representation
 {
 public:
     Term(StringExpression string_expression, LocationMap location_map); // TODO assert : len(str) == length(loc_map)
     ~Term(){};
     std::string getAsString();
-    void print();
-
+    SymbolicExpression getSymbolicExpression();
+   
 private:
     SymbolicExpression symbolic_expression;
 

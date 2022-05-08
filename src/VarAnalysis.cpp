@@ -1,117 +1,120 @@
 #include "../include/VarAnalysis.h"
 #include <algorithm>
 
-SymbolicExpression getSubExpr(SymbolicExpression s_expr, int left, int right)
+SymbolicExpression VariableAnalysis::getSubExpression(SymbolicExpression symbolic_expression, int left_index, int right_index)
 {
-    SymbolicExpression sub_s_exp;
-    int delta = s_expr.at(left).getLocation().first;
-    Symbol mod_sym;
+    SymbolicExpression sub_expression;
+    int delta = symbolic_expression.at(left_index).getLocation().first;
+    Symbol temp_symbol;
 
-    for (int i = left; i <= right; i++)
+    for (int i = left_index; i <= right_index; i++)
     {
-
-        mod_sym = s_expr.at(i);
-        mod_sym.shiftLocation(delta);
-        sub_s_exp.push_back(mod_sym);
+        temp_symbol = symbolic_expression.at(i);
+        temp_symbol.shiftLocation(delta);
+        sub_expression.push_back(temp_symbol);
     }
 
-    return sub_s_exp;
+    return sub_expression;
 }
 
-// Vars pairwise_merge(Vars left, Vars right)
-// {
-//     std::set<char> lset, rset;
+FreeAndBoundVariables VariableAnalysis::pairwise_set_merge(FreeAndBoundVariables left_term_variables, FreeAndBoundVariables right_term_variables)
+{
+    std::set<char> left_term_set, right_term_set;
 
-//     std::merge(left.first.begin(), left.first.end(),
-//                right.first.begin(), right.first.end(),
-//                std::inserter(lset, lset.begin()));
+    std::merge(left_term_variables.first.begin(), left_term_variables.first.end(),
+               right_term_variables.first.begin(), right_term_variables.first.end(),
+               std::inserter(left_term_set, left_term_set.begin()));
 
-//     std::merge(left.second.begin(), left.second.end(),
-//                right.second.begin(), right.second.end(),
-//                std::inserter(rset, rset.begin()));
+    std::merge(left_term_variables.second.begin(), left_term_variables.second.end(),
+               right_term_variables.second.begin(), right_term_variables.second.end(),
+               std::inserter(right_term_set, right_term_set.begin()));
 
-//     return {lset, rset};
-// }
+    return {left_term_set, right_term_set};
+}
 
-// // divide into free and bound variable analysis
-// Vars analyze(SymbolicExpression s_expr, Vars vars)
-// {
-//     if (s_expr.empty())
-//     {
-//         return {vars.first, vars.second};
-//     }
-//     else
-//     {
-//         SymbolicExpression lterm, rterm;
-//         Symbol first_sym = s_expr.at(0);
-//         Symbol second_sym;
-//         int open_left, close_left;
-//         int open_right, close_right;
-//         char var;
+FreeAndBoundVariables VariableAnalysis::freeVariableAnalysis(SymbolicExpression symbolic_expression, FreeAndBoundVariables variables)
+{
+    if (symbolic_expression.empty())
+    {
+        return {variables.first, variables.second};
+    }
+    else
+    {
+        SymbolicExpression left_term, right_term;
+        Symbol first_symbol = symbolic_expression.at(0);
+        Location second_symbol_location = {};
 
-//         switch (first_sym.getSymType())
-//         {
-//         case OpenApplication:
-//             if (s_expr.size() < 2)
-//             {
-//                 return {{}, {}};
-//             }
+        int open_left, close_left;
+        int open_right, close_right;
+        char var;
 
-//             second_sym = s_expr.at(1);
+        switch (first_symbol.getSymbolType())
+        {
+        case OpenApplication:
+            if (symbolic_expression.size() < 2)
+            {
+                return {{}, {}};
+            }
 
-//             open_left = second_sym.getLocation().first;
-//             close_left = second_sym.getLocation().second;
+            second_symbol_location = symbolic_expression.at(1).getLocation();
 
-//             open_right = close_left + 1;
-//             close_right = s_expr.at(open_right).getLocation().second;
+            open_left = second_symbol_location.first;
+            close_left = second_symbol_location.second;
 
-//             lterm = getSubExpr(s_expr, open_left, close_left);
-//             rterm = getSubExpr(s_expr, open_right, close_right);
+            open_right = close_left + 1;
+            close_right = symbolic_expression.at(open_right).getLocation().second;
 
-//             vars = pairwise_merge(analyze(lterm, vars), analyze(rterm, vars));
-//             break;
+            left_term = getSubExpression(symbolic_expression, open_left, close_left);
 
-//         case OpenAbstraction:
-//             second_sym = s_expr.at(1);
-//             var = second_sym.getSym().at(0);
+            right_term = getSubExpression(symbolic_expression, open_right, close_right);
 
-//             vars.second.insert(var);
-//             vars.first.erase(var);
+            variables = pairwise_set_merge(freeVariableAnalysis(left_term, variables), freeVariableAnalysis(right_term, variables));
+            break;
 
-//             open_right = s_expr.at(2).getLocation().first;
-//             close_right = s_expr.at(2).getLocation().second;
-//             rterm = getSubExpr(s_expr, open_right, close_right);
+        case OpenAbstraction:
+            var = symbolic_expression.at(1).getAsString().at(0);
 
-//             vars = analyze(rterm, vars);
-//             break;
+            variables.second.insert(var);
+            variables.first.erase(var);
 
-//         case Variable:
-//             var = first_sym.getSym().at(0);
+            open_right = symbolic_expression.at(2).getLocation().first;
+            close_right = symbolic_expression.at(2).getLocation().second;
+            right_term = getSubExpression(symbolic_expression, open_right, close_right);
 
-//             if (vars.second.find(var) == vars.second.end())
-//             {
-//                 vars.first.insert(var);
-//             }
+            variables = freeVariableAnalysis(right_term, variables);
+            break;
 
-//             break;
-//         default:
-//             break;
-//         }
-//     }
-//     return vars;
-// }
+        case Variable:
+            var = first_symbol.getAsString().at(0);
 
-// VarAnalysis::VarAnalysis(Term term) : term(term)
-// {
-//     // TODO don't use constructor for executing the analysis!
-//     auto res = analyze(term.getSExpr(), {{}, {}});
-//     free_vars = res.first;
-//     bound_vars = res.second;
-// }
+            if (variables.second.find(var) == variables.second.end())
+            {
+                variables.first.insert(var);
+            }
 
-// VarAnalysis::~VarAnalysis() {}
+            break;
+        default:
+            break;
+        }
+    }
+    return variables;
+}
 
-// std::pair<FreeVars, BoundVars> VarAnalysis::getResults()
-// {
-//     return {free_vars, bound_vars};
-// }
+void VariableAnalysis::execute(Term term)
+{
+    auto symbolic_expression = term.getSymbolicExpression();
+
+    auto free_and_bound_variables = freeVariableAnalysis(symbolic_expression, {});
+    *free_variables = free_and_bound_variables.first;
+    *bound_variables = free_and_bound_variables.second;
+}
+
+VariableSet *VariableAnalysis::getFreeVariables()
+{
+    return free_variables;
+}
+
+VariableSet *VariableAnalysis::getBoundVariables()
+{
+    return bound_variables;
+}
