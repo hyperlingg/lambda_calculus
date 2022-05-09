@@ -104,7 +104,7 @@ void VariableAnalysis::execute(Term term)
 {
     auto symbolic_expression = term.getSymbolicExpression();
 
-    auto free_and_bound_variables = freeVariableAnalysis(symbolic_expression, {});
+    auto free_and_bound_variables = freeVariableAnalysis(symbolic_expression, {{}, {}});
     *free_variables = free_and_bound_variables.first;
     *bound_variables = free_and_bound_variables.second;
 }

@@ -90,30 +90,58 @@ BOOST_AUTO_TEST_SUITE(VarAnalysisSuite)
 
 BOOST_AUTO_TEST_CASE(identity_analysis)
 {
-    // VarAnalysis va(identity);
-    // Vars result = {{}, {'x'}};
-    // BOOST_CHECK(va.getResults() == result);
+    VariableAnalysis variable_analysis;
+    variable_analysis.execute(identity);
+    auto free_variables = variable_analysis.getFreeVariables();
+    auto bound_variables = variable_analysis.getBoundVariables();
+
+    VariableSet free_expectation = {};
+    BOOST_CHECK(*free_variables == free_expectation);
+
+    VariableSet bound_expectation = {'x'};
+    BOOST_CHECK(*bound_variables == bound_expectation);
 }
 
 BOOST_AUTO_TEST_CASE(contant_y_analysis)
 {
-    // VarAnalysis va(constant_y);
-    // Vars result = {{'y'}, {'x'}};
-    // BOOST_CHECK(va.getResults() == result);
+    VariableAnalysis variable_analysis;
+    variable_analysis.execute(constant_y);
+    auto free_variables = variable_analysis.getFreeVariables();
+    auto bound_variables = variable_analysis.getBoundVariables();
+
+    VariableSet free_expectation = {'y'};
+    BOOST_CHECK(*free_variables == free_expectation);
+
+    VariableSet bound_expectation = {'x'};
+    BOOST_CHECK(*bound_variables == bound_expectation);
 }
 
 BOOST_AUTO_TEST_CASE(application_print_analysis)
 {
-    // VarAnalysis va(application);
-    // Vars result = {{'x', 'y'}, {}};
-    // BOOST_CHECK(va.getResults() == result);
+    VariableAnalysis variable_analysis;
+    variable_analysis.execute(application);
+    auto free_variables = variable_analysis.getFreeVariables();
+    auto bound_variables = variable_analysis.getBoundVariables();
+
+    VariableSet free_expectation = {'x'};
+    BOOST_CHECK(*free_variables == free_expectation);
+
+    VariableSet bound_expectation = {'y'};
+    BOOST_CHECK(*bound_variables == bound_expectation);
 }
 
 BOOST_AUTO_TEST_CASE(complex_application_analysis)
 {
-    // VarAnalysis va(complex_application);
-    // Vars result = {{'x', 'y'}, {'x', 'y'}};
-    // BOOST_CHECK(va.getResults() == result);
+    VariableAnalysis variable_analysis;
+    variable_analysis.execute(complex_application);
+    auto free_variables = variable_analysis.getFreeVariables();
+    auto bound_variables = variable_analysis.getBoundVariables();
+
+    VariableSet free_expectation = {'x', 'y'};
+    BOOST_CHECK(*free_variables == free_expectation);
+
+    VariableSet bound_expectation = {'x', 'y'};
+    BOOST_CHECK(*bound_variables == bound_expectation);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

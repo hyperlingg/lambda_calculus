@@ -111,3 +111,8 @@ void Term::initializeSymbolicExpression(StringExpression string_expression, Loca
         }
     }
 }
+
+SymbolicExpression Term::getSymbolicExpression()
+{
+    return symbolic_expression;
+}
