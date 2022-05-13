@@ -1,5 +1,6 @@
 build/
 test/test_build
+test/debug_test_build
 test/CMakeFiles
 test/lambda_calculus
 test/include/CMakeFiles

@@ -3,6 +3,7 @@ project(lambda_testing)
 enable_testing()
 
 set(Boost_ADDITIONAL_VERSIONS "1.71" "1.71.0")
+set(CMAKE_DEBUG_POSTFIX d)
 
 # finds boost, triggers an error otherwise
 find_package(Boost 1.71 REQUIRED COMPONENTS unit_test_framework)
@@ -18,6 +19,8 @@ target_include_directories(lambda_test PUBLIC ${Boost_INCLUDE_DIRS} ../include)
 target_compile_definitions(lambda_test PUBLIC "BOOST_TEST_DYN_LINK=1")
 # indicates the link paths
 target_link_libraries(lambda_test Definitions VarAnalysis ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+
+set_target_properties(lambda_test PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 
 # declares a test with our executable
 add_test(NAME test1 COMMAND lambda_test)
